@@ -33,7 +33,9 @@
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
-            <div id="content" style="margin-top: 30px">
+            <div id="content">
+
+                @include('admin.partials.navbar')
 
                 @yield('admin_content')
 

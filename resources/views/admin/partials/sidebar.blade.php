@@ -17,11 +17,11 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Nav Item - Tasks -->
+        <!-- Nav Item - analytics -->
         <li class="nav-item active">
-            <a class="nav-link" href="{{route('admin.tasks.index')}}">
+            <a class="nav-link" href="{{route('admin.analytics')}}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Task</span>
+                <span>Analytics</span>
             </a>
         </li>
 

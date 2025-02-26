@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\TaskController;
+use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\ShortUrlController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +21,15 @@ Route::middleware('auth')->group(function () {
 
     // Admin task route
     Route::name('admin.')->prefix('admin/')->group(function () {
-        Route::resource('tasks', TaskController::class);
+
+        Route::post('/shorten', [ShortUrlController::class, 'store'])->name('shorten');
+       
+        Route::get('/analytics', [AnalyticsController::class, 'analytics'])->name('analytics');
+        Route::get('/analytics/details/{id}', [AnalyticsController::class, 'details'])->name('details');
     });
 
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/{code}', [ShortUrlController::class, 'redirect']);
