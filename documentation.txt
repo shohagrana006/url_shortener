@@ -1,0 +1,63 @@
+#Project Architecture
+
+    - Overview
+        This project is a URL Shortener with Analytics, built using Laravel. Users can shorten URLs, track click analytics, and view reports. The system is designed to efficiently handle concurrent requests.
+
+    - Tech Stack
+        Using  Laravel Framework,MySQL Database, in-memory caching, stevebauman/location package for Geolocation, Database Locking for Concurrent Request Handling, Cache First Approach for Performance Optimization
+
+    - Authentication & Dashboard
+        1. User authentication is implemented using Laravel Breeze (Registration, Login, Logout).
+        2. After logging in, users are redirected to the dashboard, where they can create and analyze short URLs.
+
+
+    - System Flow
+
+        1. URL Shortening (Storing URLs)
+
+        When a user submits a long URL, the system:
+        - Caching is checked (If exists, return cached short URL).
+        - Check Database for Existing Entry (If URL exists, check if it’s expired - If expired, renew it).
+        - If the URL doesn’t exist, it goes through additional validation:
+        - Sanitization (removes dangerous content).
+        - Prevents IP-based URLs (blocks local/internal IPs).
+        - Prevents suspicious redirects (?redirect=malicious.com).
+        - Ensures the URL is reachable before storing.
+    
+        Pass validation, 
+        - generate a unique short code using Base62 encoding.
+        - Store in MySQL with an expiry of 30 days & cache for faster retrieval.
+        - Displays the short URL on the user’s dashboard.
+
+        Note: Each user is allowed to create up to 5 short URLs per day to prevent system abuse.
+
+
+        2. Redirection (Accessing Short URLs)
+
+        When a user accesses a short URL, the system:
+        - fetch the URL from the database using a locking mechanism to prevent concurrent access issues.
+        - If expired, it returns an error message.
+        - If valid, it safely Click count is updated atomically using database transactions.
+        - Analytics data is stored in the background (IP, location, timestamp).
+        - User is redirected securely using redirect()->away($originalUrl).
+
+
+
+#Analytics Tracking
+
+    The system tracks how often each short URL is accessed.
+
+    1. Click Tracking
+        - Each short URL has a clicks column in the short_urls table.
+        - When a user visits a short URL, the click count increments atomically.
+
+    2. Geolocation & IP Tracking
+        - The user’s IP address is retrieved.
+        - If accessing from localhost (127.0.0.1), fetch the external IP using the ipify API.
+        - Stores geolocation.
+
+    3. User Analytics & Reports
+        - Users can view analytics from the dashboard.
+        - Retrieves click data from MySQL and paginated.
+        - The analytics table stores: User IP Address, Geolocation(Country), Timestamp(clicked_at)
+

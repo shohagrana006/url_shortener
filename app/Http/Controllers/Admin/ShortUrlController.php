@@ -111,11 +111,13 @@ class ShortUrlController extends Controller
             $shortUrl->increment('clicks');
         });
 
-        //  118.179.156.177
-        //  51.159.98.170
-        //  66.249.70.98
+  
         // Get user IP and location
         $ip = request()->ip();
+        if ($ip == '127.0.0.1') {
+            $ip = json_decode(Http::get('https://api64.ipify.org?format=json')->body(), true)['ip'];
+        }
+
         $location = Location::get($ip);
         try {
            // Store analytics data
