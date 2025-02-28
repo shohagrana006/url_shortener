@@ -8,6 +8,10 @@ This is a Mini URL Shortener with Analytics project. The system uses Laravel Fra
 
 # Project Setup Instructions
 
+
+### System require
+- PHP version 8.2 or above
+
 ### Clone the Repository
 
 - Open your terminal and run
