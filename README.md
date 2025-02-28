@@ -17,7 +17,8 @@ This is a Mini URL Shortener with Analytics project. The system uses Laravel Fra
 - Open your terminal and run
     - `git clone https://github.com/shohagrana006/url_shortener.git`
     - `cd url_shortener`
-    - `composer install && npm install`
+    - `composer install`
+    - `npm install && npm run build`
     - `cp .env.example .env`
 
 ### DB setup:
